@@ -1,0 +1,9 @@
+
+
+## Patch de correções — áudio, armas e animações
+- Padronizados nomes de faixas e áudio de troca para nomes ASCII seguros, evitando falha de carregamento por acentuação/encoding.
+- Som de recarga após disparo da carabina.
+- Armas reposicionadas para uma posição mais central e baixa nas costas.
+- Pernas com geometria cilíndrica suavizada (mais segmentos).
+- Ataque de espada com preparação, giro do tronco, varredura e acompanhamento dos braços.
+- Mercador recebeu camadas de tecido, dobras, costuras e amuleto.

@@ -113,8 +113,8 @@ const box=(w,h,d,c,x,y,z,p)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d
 const limb=(w,h,c,x,y,p)=>{const g=new THREE.Group();g.position.set(x,y,0);p.add(g);const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,w),mat(c));m.position.y=-h/2;g.add(m);return g};
 const SKIN=0xa86a42,HAIR=0x14100e,STRAW=0xdcae4a,PANTS=0x2c2b3a,TANK=0xf4f4f2,SASH=0x8f8a84,LEATH=0x6e4526;
 function leg(x){const g=new THREE.Group();g.position.set(x,.9,0);vis.add(g);
- const p=new THREE.Mesh(new THREE.CylinderGeometry(.28,.2,.74,8),mat(PANTS));p.position.y=-.37;g.add(p);
- const c=new THREE.Mesh(new THREE.CylinderGeometry(.2,.17,.1,8),mat(0x1f1e2a));c.position.y=-.78;g.add(c);
+ const p=new THREE.Mesh(new THREE.CylinderGeometry(.235,.19,.74,16),mat(PANTS));p.position.y=-.37;g.add(p);
+ const c=new THREE.Mesh(new THREE.CylinderGeometry(.19,.17,.12,16),mat(0x1f1e2a));c.position.y=-.78;g.add(c);
  box(.17,.06,.3,SKIN,0,-.86,.04,g);box(.22,.04,.38,LEATH,0,-.89,.04,g);box(.2,.05,.09,0x4a2c18,0,-.83,.08,g);return g}
 const legL=leg(-.17),legR=leg(.17),torso=new THREE.Group();torso.position.y=.9;vis.add(torso);
 box(.64,.32,.42,PANTS,0,.95,0,vis);box(.62,.12,.4,0x24232e,0,1.08,0,vis);box(.66,.11,.44,SASH,0,1.0,0,vis);
@@ -125,8 +125,8 @@ const shirtParts=[
  new THREE.Mesh(new THREE.SphereGeometry(.12,12,10),mat(TANK)),
  new THREE.Mesh(new THREE.SphereGeometry(.12,12,10),mat(TANK))
 ];
-shirtParts[0].scale.set(1.0,.55,.72);shirtParts[0].position.set(0,.13,0);
-shirtParts[1].scale.set(1.0,.88,.72);shirtParts[1].position.set(0,.46,0);
+shirtParts[0].scale.set(1.06,.62,.78);shirtParts[0].position.set(0,.13,0);
+shirtParts[1].scale.set(1.04,.92,.78);shirtParts[1].position.set(0,.46,0);
 shirtParts[2].scale.set(.9,.48,.75);shirtParts[2].position.set(-.2,.66,0);
 shirtParts[3].scale.set(.9,.48,.75);shirtParts[3].position.set(.2,.66,0);
 shirtParts.forEach(m=>torso.add(m));
@@ -166,26 +166,33 @@ HATS.oni={n:'Máscara Oni',p:110,b:g=>{const G=0xb9bec0,GD=0x7c8386,GO=0xc9a24a,
  HM(new THREE.BoxGeometry(.07,.1,.07),G,0,.82,.27,g);HM(new THREE.BoxGeometry(.24,.08,.03),K,0,.68,.262,g);
  HM(new THREE.BoxGeometry(.2,.03,.03),IV,0,.715,.272,g);HM(new THREE.BoxGeometry(.2,.03,.03),IV,0,.645,.272,g);HM(new THREE.BoxGeometry(.28,.1,.1),G,0,.58,.2,g)}};
 const hipG=new THREE.Group();vis.add(hipG);
-const swordHip=new THREE.Group();swordHip.position.set(-.3,.95,.1);swordHip.rotation.set(.45,0,.12);hipG.add(swordHip);box(.09,.7,.09,LEATH,0,-.38,0,swordHip);box(.11,.05,.11,0xe8b23a,0,-.03,0,swordHip);
+const swordHip=new THREE.Group();swordHip.position.set(-.24,1.12,-.34);swordHip.rotation.set(.08,0,.52);hipG.add(swordHip);box(.09,.7,.09,LEATH,0,-.38,0,swordHip);box(.11,.05,.11,0xe8b23a,0,-.03,0,swordHip);
 const swordHipBlade=new THREE.Group();swordHip.add(swordHipBlade);box(.06,.2,.06,0x4a2c18,0,.12,0,swordHipBlade);box(.22,.04,.07,0xe8b23a,0,.01,0,swordHipBlade);swordHipBlade.visible=false;
-const gunHip=new THREE.Group();gunHip.position.set(.4,.88,.06);hipG.add(gunHip);box(.15,.3,.17,LEATH,0,-.05,0,gunHip);
-const gunHipButt=new THREE.Group();gunHip.add(gunHipButt);box(.08,.2,.11,0x6b3f1f,0,.17,0,gunHipButt);
+const gunHip=new THREE.Group();gunHip.position.set(.20,1.08,-.36);gunHip.rotation.set(.08,0,-.24);hipG.add(gunHip);box(.16,.14,.62,0x4b2b1b,0,0,0,gunHip);box(.07,.07,.72,0x29282a,0,.02,.52,gunHip);
+const gunHipButt=new THREE.Group();gunHip.add(gunHipButt);box(.16,.15,.28,0x65402a,0,0,-.38,gunHipButt);
 const SHIRTS=[{n:'Branca',c:0xf4f4f2,p:0},{n:'Vermelha',c:0xb3342a,p:10},{n:'Azul',c:0x2f5d9c,p:10},{n:'Verde',c:0x3f7a3d,p:10},{n:'Preta',c:0x25252b,p:10},{n:'Ocre',c:0xc08a2e,p:10},{n:'Roxa',c:0x6a3d8f,p:10}];
 const COS={hat:'palha',shirt:0xf4f4f2,hats:['palha'],shirts:[0xf4f4f2]};
 try{Object.assign(COS,JSON.parse(localStorage.getItem('sw_cos')||'{}'))}catch(e){}
 if(!Array.isArray(COS.hats))COS.hats=['palha'];if(!Array.isArray(COS.shirts))COS.shirts=[0xf4f4f2];
 const saveCos=()=>{try{localStorage.setItem('sw_cos',JSON.stringify(COS))}catch(e){}};
-function setHat(id){if(!HATS[id])id='palha';COS.hat=id;hatG.children.slice().forEach(c=>hatG.remove(c));HATS[id].b(hatG)}
+function setHat(id){if(!HATS[id])id='palha';COS.hat=id;hatG.children.slice().forEach(c=>hatG.remove(c));hatG.scale.setScalar(['tengu','oni','kabuto','mino','negro'].includes(id)?1.24:1.12);HATS[id].b(hatG)}
 function setShirt(c){COS.shirt=c;shirtParts.forEach(m=>m.material.color.setHex(c))}
 setHat(COS.hat);setShirt(COS.shirt);
 const armL=limb(.2,.7,SKIN,-.43,.62,torso),armR=limb(.2,.7,SKIN,.43,.62,torso);
-for(const a of[armL,armR]){box(.25,.25,.25,SKIN,0,-.04,0,a);box(.16,.16,.16,SKIN,0,-.74,0,a)}
-const sword=new THREE.Group();sword.position.y=-.74;armR.add(sword);
-box(.07,.28,.07,0x4a2c18,0,-.08,0,sword);box(.38,.06,.1,0xe8b23a,0,-.25,0,sword);
-const blade=box(.1,1.4,.03,0xdfe6ec,0,-.97,0,sword);blade.material.emissive=new THREE.Color(0x223344);const sheathVisual=box(.12,.82,.13,LEATH,.34,.42,-.2,vis);sheathVisual.rotation.z=-.12;sheathVisual.visible=false;
-const gun=new THREE.Group();gun.position.y=-.74;gun.visible=false;armR.add(gun);
-box(.1,.3,.14,0x6b3f1f,0,.02,0,gun);box(.07,.75,.07,0x2b2b30,0,-.5,0,gun);box(.12,.08,.12,0xb08a3a,0,-.2,0,gun);
-const bell=new THREE.Mesh(new THREE.CylinderGeometry(.06,.14,.24,8),mat(0x2b2b30));bell.position.y=-.92;gun.add(bell);
+for(const a of[armL,armR]){const hand=new THREE.Mesh(new THREE.SphereGeometry(.105,10,8),mat(SKIN));hand.position.set(0,-.72,.025);a.add(hand);for(let f=0;f<3;f++){const finger=new THREE.Mesh(new THREE.CylinderGeometry(.022,.028,.13,6),mat(SKIN));finger.position.set((f-1)*.045,-.76,.09);finger.rotation.x=-.5;a.add(finger)}}
+// Weapons are parented to the torso so both hands can grip the same stable object.
+const sword=new THREE.Group();sword.position.set(.02,.13,.53);sword.rotation.x=-2.48;torso.add(sword);
+box(.075,.30,.075,0x4a2c18,0,-.08,0,sword);box(.40,.055,.10,0xe8b23a,0,-.25,0,sword);
+const blade=box(.105,1.42,.035,0xdfe6ec,0,-.99,0,sword);blade.material.emissive=new THREE.Color(0x223344);const sheathVisual=box(.12,.82,.13,LEATH,.34,.42,-.2,vis);sheathVisual.rotation.z=-.12;sheathVisual.visible=false;
+const gun=new THREE.Group();gun.position.set(0,.22,.54);gun.visible=false;torso.add(gun);
+// Antique wooden carbine: stock toward the shoulder, long barrel pointing forward.
+box(.19,.16,.58,0x4b2b1b,0,-.015,-.20,gun);box(.22,.13,.32,0x65402a,0,.005,-.48,gun);
+box(.15,.12,.44,0x29282a,0,.02,.16,gun);box(.075,.075,.82,0x242326,0,.035,.70,gun);
+const barrelTip=new THREE.Mesh(new THREE.CylinderGeometry(.052,.052,.10,10),mat(0x171719));barrelTip.rotation.x=PI/2;barrelTip.position.set(0,.035,1.12);gun.add(barrelTip);
+box(.12,.29,.10,0x29282a,0,-.20,.13,gun);box(.14,.10,.18,0x242326,0,-.22,.16,gun);
+// trigger and iron sights
+const trigger=new THREE.Mesh(new THREE.TorusGeometry(.075,.012,5,12,PI),mat(0x171719));trigger.position.set(0,-.105,-.015);trigger.rotation.x=PI/2;gun.add(trigger);
+box(.055,.07,.06,0x171719,0,.12,.30,gun);box(.045,.055,.05,0x171719,0,.12,.95,gun);
 const wfx=(()=>{const mk=(parent,y0,y1,n)=>{const fire=new THREE.Group(),bolt=new THREE.Group();parent.add(fire,bolt);fire.visible=bolt.visible=false;const F=[],B=[],cs=[0xff3a12,0xff8a1e,0xffc93a];
  for(let i=0;i<n;i++){const y=y0+(y1-y0)*i/(n-1);for(const s of[-1,1]){const c=new THREE.Mesh(new THREE.ConeGeometry(.08,.34,5),new THREE.MeshBasicMaterial({color:cs[(i+(s>0?1:0))%3],transparent:true,opacity:.85,depthWrite:false}));c.position.set(s*.1,y,0);c.rotation.z=-s*PI/2.6;fire.add(c);F.push({c,i})}}
  for(let i=0;i<4;i++){const b=new THREE.Mesh(new THREE.BoxGeometry(.03,.3,.03),new THREE.MeshBasicMaterial({color:0x7fe9ff,transparent:true,opacity:.95,depthWrite:false}));bolt.add(b);B.push(b)}
@@ -196,7 +203,7 @@ function updWeaponFx(dt){const P=pl.skills.swordPath,st=P==='fire'?(pl.skills.fi
   if(f.bolt.visible){f.tb-=dt;if(f.tb<=0){f.tb=.05;f.B.forEach(b=>{b.position.set(rnd(-.12,.12),rnd(f.y0,f.y1),rnd(-.06,.06));b.rotation.z=rnd(-.9,.9);b.rotation.x=rnd(-.5,.5);b.scale.y=rnd(.5,1.6);b.visible=Math.random()<.8})}}}
  if(!mx)return;blade.material.emissive.setHex(P==='fire'?0xb02a0c:0x1a7fa8);const col=P==='fire'?0xff7a1a:0x7fe9ff,gv=P==='fire'?-2:0;
  if(sword.visible&&Math.random()<.4){sword.localToWorld(tmp.set(0,-1.2-Math.random()*.4,0));spark(tmp,col,1,2,.1,gv)}
- if(gun.visible&&Math.random()<.4){gun.localToWorld(tmp.set(0,-1,0));spark(tmp,col,1,2,.1,gv)}}
+ if(gun.visible&&Math.random()<.4){gun.localToWorld(tmp.set(0,.035,1.15));spark(tmp,col,1,2,.1,gv)}}
 box(.08,.8,.1,0x3a2218,-.4,.95,-.1,vis).rotation.z=.8;
 vis.traverse(m=>{if(m.isMesh)m.castShadow=true});
 // Forma noturna: lobisomem estilizado, com focinho, orelhas e garras.
@@ -236,33 +243,33 @@ const slashMat=new THREE.MeshBasicMaterial({color:0xffe6a3,transparent:true,opac
 const slashCore=new THREE.Mesh(new THREE.TorusGeometry(1.05,.055,6,32,PI*.92),slashMat);slashFx.add(slashCore);
 const slashGlow=new THREE.Mesh(new THREE.TorusGeometry(1.05,.12,5,32,PI*.92),new THREE.MeshBasicMaterial({color:0xff9b3d,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}));slashFx.add(slashGlow);
 let slashT=0;
-function setWeapon(w){pl.weapon=w;sword.visible=!w;gun.visible=!!w;reticle.visible=!!w;swordHipBlade.visible=!!w;gunHipButt.visible=!w;pl.buf=0;pl.rec=0}
-const SWAP={dur:.64,store:.2,draw:.42};
-function applyWeapon(w){pl.weapon=w;sword.visible=!w;gun.visible=!!w;reticle.visible=!!w;swordHipBlade.visible=!!w;gunHipButt.visible=!w;pl.buf=0;pl.rec=0}
-function startSwap(w){if(pl.swapT>0||w===pl.weapon)return;if(pl.werewolf){setWeapon(w);return}pl.swapT=1e-4;pl.swapTo=w;pl.swapStep=0;pl.swapFrom={x:armR.rotation.x,z:armR.rotation.z};playSfx('bainha',.7)}
-function finishSwap(){if(pl.swapT>0&&pl.swapStep<2)applyWeapon(pl.swapTo);pl.swapT=0}
+function setWeapon(w){pl.weapon=w;sword.visible=!w;gun.visible=!!w;reticle.visible=!!w;swordHipBlade.visible=!!w;gunHip.visible=!w;gunHipButt.visible=!w;pl.buf=0;pl.rec=0}
+const SWAP={dur:1.05,store:.38,draw:.70};
+function applyWeapon(w){pl.weapon=w;sword.visible=!w;gun.visible=!!w;reticle.visible=!!w;swordHipBlade.visible=!!w;gunHip.visible=!w;gunHipButt.visible=!w;pl.buf=0;pl.rec=0;}
+function startSwap(w){if(pl.swapT>0||w===pl.weapon||pl.state==='attack'||pl.state==='dodge')return;if(pl.werewolf){setWeapon(w);return}pl.swapT=1e-4;pl.swapTo=w;pl.swapStep=0;pl.swapFrom={x:armR.rotation.x,z:armR.rotation.z};pl.swapAudioDone=false;playSfx('mudancaarma',.85);}
+function finishSwap(){if(pl.swapT>0&&pl.swapStep<2)applyWeapon(pl.swapTo);pl.swapT=0;}
 function swapAnim(dt){pl.swapT+=dt;const t=pl.swapT,old=1-pl.swapTo;
- if(pl.swapStep<1&&t>=SWAP.store){pl.swapStep=1;sword.visible=false;gun.visible=false;reticle.visible=false;if(old===0)swordHipBlade.visible=true;else gunHipButt.visible=true;playSfx('bainha',.5)}
- if(pl.swapStep<2&&t>=SWAP.draw){pl.swapStep=2;applyWeapon(pl.swapTo);playSfx('mudancaarma')}
- const hip=w=>w?{x:.3,z:-.2}:{x:.45,z:-1.1},A=hip(old),B=hip(pl.swapTo),C={x:-.8,z:-.12},F=pl.swapFrom;let a,b,k;
+ const stow=old===0?swordHip:swordHip; // both props remain attached to the back/hip while not held
+ if(pl.swapStep<1&&t>=SWAP.store){pl.swapStep=1;sword.visible=false;gun.visible=false;reticle.visible=false;if(old===0)swordHipBlade.visible=true;else gunHipButt.visible=true;}
+ if(pl.swapStep<2&&t>=SWAP.draw){pl.swapStep=2;applyWeapon(pl.swapTo);}
+ // Reach behind the shoulder to stow the old weapon, then draw the new one.
+ const A={x:-1.35,z:old?-.65:.72},B={x:-1.55,z:pl.swapTo?-.7:.72},C=pl.swapTo?{x:-1.12,z:-.08}:{x:-1.0,z:-.18},F=pl.swapFrom;let a,b,k;
  if(t<SWAP.store){a=F;b=A;k=t/SWAP.store}else if(t<SWAP.draw){a=A;b=B;k=(t-SWAP.store)/(SWAP.draw-SWAP.store)}else{a=B;b=C;k=Math.min(1,(t-SWAP.draw)/(SWAP.dur-SWAP.draw))}
- k=k*k*(3-2*k);armR.rotation.x=a.x+(b.x-a.x)*k;armR.rotation.z=a.z+(b.z-a.z)*k;
- torso.rotation.y=Math.sin(Math.min(1,t/SWAP.dur)*PI)*.12*(old?1:-1);
- if(t>=SWAP.dur)pl.swapT=0}
-function poseWeaponArms(dt){const k=Math.min(1,14*dt);if(pl.weapon){
- // Trabuco/carbine: two hands supporting the stock and fore-end, held forward.
- armL.position.x+=(-.25-armL.position.x)*k;armL.position.y+=(.58-armL.position.y)*k;
- armL.rotation.x+=(-1.02-armL.rotation.x)*k;armL.rotation.y+=(.12-armL.rotation.y)*k;armL.rotation.z+=(.58-armL.rotation.z)*k;
- armR.position.x+=(.38-armR.position.x)*k;armR.position.y+=(.62-armR.position.y)*k;
- armR.rotation.x+=(-.92-pl.rec*.12-armR.rotation.x)*k;armR.rotation.y+=(.02-armR.rotation.y)*k;armR.rotation.z+=(-.08-armR.rotation.z)*k;gun.rotation.z+=(-.04-gun.rotation.z)*k;
+ k=k*k*(3-2*k);armR.rotation.x=a.x+(b.x-a.x)*k;armR.rotation.z=a.z+(b.z-a.z)*k;armL.rotation.x+=(-1.25-armL.rotation.x)*Math.min(1,8*dt);
+ torso.rotation.y=Math.sin(Math.min(1,t/SWAP.dur)*PI)*.18*(old?1:-1);
+ if(t>=SWAP.dur){pl.swapT=0;torso.rotation.y=0;}}
+function poseWeaponArms(dt){if(pl.swapT>0||pl.state==='attack'||pl.state==='dodge')return;const k=Math.min(1,16*dt);
+ // Both hands reach a shared grip; the carbine is shouldered and aimed forward.
+ if(pl.weapon){
+  armL.position.x+=(-.31-armL.position.x)*k;armL.position.y+=(.62-armL.position.y)*k;armL.rotation.x+=(-1.12-armL.rotation.x)*k;armL.rotation.y+=(.02-armL.rotation.y)*k;armL.rotation.z+=(.18-armL.rotation.z)*k;
+  armR.position.x+=(.38-armR.position.x)*k;armR.position.y+=(.62-armR.position.y)*k;armR.rotation.x+=(-.98-pl.rec*.12-armR.rotation.x)*k;armR.rotation.y+=(.02-armR.rotation.y)*k;armR.rotation.z+=(-.12-armR.rotation.z)*k;
+  gun.rotation.set(0,0,0);
  }else{
- // Sword guard: both hands meet on the hilt in front of the chest.
- armL.position.x+=(-.28-armL.position.x)*k;armL.position.y+=(.58-armL.position.y)*k;
- armL.rotation.x+=(-.82-armL.rotation.x)*k;armL.rotation.y+=(.08-armL.rotation.y)*k;armL.rotation.z+=(.42-armL.rotation.z)*k;
- armR.position.x+=(.34-armR.position.x)*k;armR.position.y+=(.62-armR.position.y)*k;
- armR.rotation.x+=(-.98-armR.rotation.x)*k;armR.rotation.y+=(-.04-armR.rotation.y)*k;armR.rotation.z+=(-.2-armR.rotation.z)*k;
+  armL.position.x+=(-.29-armL.position.x)*k;armL.position.y+=(.62-armL.position.y)*k;armL.rotation.x+=(-1.08-armL.rotation.x)*k;armL.rotation.y+=(.02-armL.rotation.y)*k;armL.rotation.z+=(.30-armL.rotation.z)*k;
+  armR.position.x+=(.29-armR.position.x)*k;armR.position.y+=(.62-armR.position.y)*k;armR.rotation.x+=(-1.08-armR.rotation.x)*k;armR.rotation.y+=(-.02-armR.rotation.y)*k;armR.rotation.z+=(-.30-armR.rotation.z)*k;
+  sword.rotation.x+=(-2.48-sword.rotation.x)*k;sword.rotation.y+=(0-sword.rotation.y)*k;sword.rotation.z+=(0-sword.rotation.z)*k;
  }}
-function shoot(){if(pl.swapT>0)return;if(pl.ammo<=0){pl.buf=0;toast('Sem balas! Procure o mercador.');playSfx('merchant',.45);return}pl.ammo--;pl.shootCd=.5;pl.buf=0;pl.rec=1;gun.localToWorld(tmp.set(0,-1,0));const b=new THREE.Mesh(bgeo,new THREE.MeshBasicMaterial({color:pl.skills.explosive?0xff9b35:0xffe08a}));b.position.copy(tmp);scene.add(b);bullets.push({m:b,vx:Math.sin(pl.face)*38,vz:Math.cos(pl.face)*38,l:1.1,explosive:!!pl.skills.explosive});spark(tmp,0xffc46a,10,5,.16,3);spark(tmp,0x888888,6,2,.3,-1);shake=.2;playSfx('trabuco')}
+function shoot(){if(pl.swapT>0)return;if(pl.ammo<=0){pl.buf=0;toast('Sem balas! Procure o mercador.');playSfx('merchant',.45);return}pl.ammo--;pl.shootCd=.5;pl.buf=0;pl.rec=1;gun.localToWorld(tmp.set(0,.035,1.15));const b=new THREE.Mesh(bgeo,new THREE.MeshBasicMaterial({color:pl.skills.explosive?0xff9b35:0xffe08a}));b.position.copy(tmp);scene.add(b);bullets.push({m:b,vx:Math.sin(pl.face)*38,vz:Math.cos(pl.face)*38,l:1.1,explosive:!!pl.skills.explosive});spark(tmp,0xffc46a,10,5,.16,3);spark(tmp,0x888888,6,2,.3,-1);shake=.2;playSfx('trabuco');setTimeout(()=>playSfx('recharge',.8),260)}
 function explosiveBlast(x,z){const pos=tmp.set(x,.55,z);const ring=new THREE.Mesh(new THREE.RingGeometry(.35,2.8,32),new THREE.MeshBasicMaterial({color:0xff8a26,transparent:true,opacity:.95,side:THREE.DoubleSide,depthWrite:false}));ring.rotation.x=-PI/2;ring.position.copy(pos);scene.add(ring);const light=new THREE.PointLight(0xff7a20,5,10);light.position.set(x,1,z);scene.add(light);spark(pos,0xffb13b,36,10,.28,1);spark(pos,0xffe6a0,22,7,.18,1);playSfx('bomba');shake=.75;let t=0;const anim=()=>{t+=.04;ring.scale.setScalar(1+t*1.6);ring.material.opacity=Math.max(0,.95-t*.9);light.intensity=Math.max(0,5-t*7);if(t>=1){scene.remove(ring);scene.remove(light)}else requestAnimationFrame(anim)};requestAnimationFrame(anim);for(const e of enemies){if(e.dead||e.clone)continue;if(Math.hypot(e.x-x,e.z-z)<=3.2){e.hp=0;kill(e)}}}
 function updBullets(dt){for(let i=bullets.length-1;i>=0;i--){const b=bullets[i];let dead=false;const n=Math.ceil(38*dt/.3)||1,sx=b.vx*dt/n,sz=b.vz*dt/n;
  for(let k=0;k<n&&!dead;k++){b.m.position.x+=sx;b.m.position.z+=sz;
@@ -272,17 +279,17 @@ function updBullets(dt){for(let i=bullets.length-1;i>=0;i--){const b=bullets[i];
 /* ---------- Áudio do pacote de assets ---------- */
 const AUDIO_ROOT='assets/audio/';
 const MUSIC_TRACKS=[
- 'Combaião Determinado.wav',
- 'Sertão de Lâmpadas 1 (1).wav',
- 'Sertão de Lâmpadas 2 (1).wav',
- 'Sertão do Shakuhachi.wav',
- 'Sertão do Shakuhachi 2.wav'
+ 'music_baiao_determinado.wav',
+ 'music_lampadas_1.wav',
+ 'music_lampadas_2.wav',
+ 'music_shakuhachi_1.wav',
+ 'music_shakuhachi_2.wav'
 ];
 const SFX_FILES={
  merchant:'merchant.mp3',shield:'shield.mp3',sword:'sword.mp3',arrow:'arrow.mp3',
  bainha:'bainha.mp3',balas:'balas.mp3',bomba:'bomba.mp3',coins:'coins.mp3',
  cura:'cura.mp3',danoeletrico:'danoeletrico.mp3',dash:'dash.mp3',hurtnpc:'hurtnpc.mp3',
- level:'level.mp3',magic:'magic.mp3',mudancaarma:'mudançaarma.mp3',
+ level:'level.mp3',magic:'magic.mp3',mudancaarma:'weapon_swap.mp3',
  nunlaugh:'nun-laugh.mp3',openbag:'openbag.mp3',recharge:'recharge-gun.wav',
  somdor:'somdor.mp3',sowrdinimigo:'sowrdinimigo.mp3',swordnpc:'swordnpc.mp3',
  trabuco:'trabuco.mp3',waveup:'waveup.mp3',xp:'xp.mp3'
@@ -292,12 +299,12 @@ for(const [key,file] of Object.entries(SFX_FILES)){const a=new Audio(AUDIO_ROOT+
 const musicAudio=new Audio();musicAudio.preload='auto';musicAudio.loop=false;
 let musicOrder=[],musicIndex=0,musicStarted=false;
 function shuffleMusic(){musicOrder=[...MUSIC_TRACKS];for(let i=musicOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[musicOrder[i],musicOrder[j]]=[musicOrder[j],musicOrder[i]]}musicIndex=0}
-const WOLF_TRACKS=['Vaqueiro Entoada.wav','Vaqueiro Entoada 2.wav'];let musicMode='normal',lastWolf='';
+const WOLF_TRACKS=['music_vaqueiro_1.wav','music_vaqueiro_2.wav'];let musicMode='normal',lastWolf='';
 function setMusicMode(m){if(m===musicMode)return;musicMode=m;if(musicStarted)playNextMusic()}
 function playNextMusic(){let track;if(musicMode==='wolf'){const o=WOLF_TRACKS.filter(t=>t!==lastWolf);track=lastWolf=o[Math.floor(Math.random()*o.length)]}else{if(!musicOrder.length||musicIndex>=musicOrder.length)shuffleMusic();track=musicOrder[musicIndex++]}musicAudio.src=AUDIO_ROOT+'music/'+track;musicAudio.volume=Math.max(0,Math.min(1,S.master*S.music));musicAudio.play().catch(()=>{});}
 function startMusic(){if(musicStarted)return;musicStarted=true;shuffleMusic();playNextMusic()}
 musicAudio.addEventListener('ended',playNextMusic);
-function playSfx(key,mult=1){const base=sfxCache[key];if(!base)return;const a=base.cloneNode();a.volume=Math.max(0,Math.min(1,S.master*S.sfx*mult));a.currentTime=0;a.play().catch(()=>{});}
+function playSfx(key,mult=1){const base=sfxCache[key];if(!base)return;const a=base.cloneNode();a.volume=Math.max(0,Math.min(1,S.master*S.sfx*mult));a.currentTime=0;a.play().catch(()=>{});return a;}
 let ac;function snd(f,d,type='square',v=.06,f2,ch){if(!ac)return;const o=ac.createOscillator(),g=ac.createGain(),n=ac.currentTime;o.type=type;o.frequency.setValueAtTime(f,n);o.frequency.exponentialRampToValueAtTime(f2||f*.5,n+d);g.gain.setValueAtTime(Math.max(.0002,v*S.master*S[ch||'sfx']*2),n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(n+d)}
 /* partículas */
 const PT=[],pg=new THREE.BoxGeometry(1,1,1);for(let i=0;i<100;i++){const m=new THREE.Mesh(pg,new THREE.MeshBasicMaterial({color:0xffffff}));m.visible=false;scene.add(m);PT.push({m,l:0,v:new THREE.Vector3(),g:9})}
@@ -328,14 +335,14 @@ function updPlayer(dt){
   if(pl.buf>0&&pl.atkT>.08&&!pl.queued){pl.queued=true;pl.buf=0}
   const sp=a.lunge*Math.max(0,1-pl.atkT/a.te);vx=Math.sin(pl.face)*sp;vz=Math.cos(pl.face)*sp;
   let p;if(pl.atkT<a.ts)p=lerpPose(pl.sp,a.from,Math.pow(pl.atkT/a.ts,2));else if(pl.atkT<a.te){const k=(pl.atkT-a.ts)/(a.te-a.ts);p=lerpPose(a.from,a.to,1-Math.pow(1-k,3))}else p=lerpPose(a.to,REST,(pl.atkT-a.te)/(a.dur-a.te));
-  pl.pose=p;const phase=Math.min(1,pl.atkT/a.dur);vis.rotation.y=Math.sin(phase*PI)*(.16+(pl.i===2?.18:0));torso.rotation.x=Math.sin(phase*PI)*-.16;torso.rotation.z=Math.sin(phase*PI*2)*.12;vis.position.y=Math.sin(phase*PI)*.06;armL.rotation.x=-.45-Math.sin(phase*PI)*.55;armL.rotation.z=.18+Math.sin(phase*PI)*.3;sword.rotation.x=Math.sin(phase*PI)*-.55;sword.rotation.z=(pl.i===1?-.25:pl.i===2?.35:.12)+Math.sin(phase*PI*2)*.28; if(pl.i===2&&pl.skills.lightning&&!pl.lightningDone&&pl.atkT>=a.ts){pl.lightningDone=true;lightningCut()}if(pl.lightningDash){const d=pl.lightningDash;d.t+=dt;const q=Math.min(1,d.t/d.dur),ease=q*q*(3-2*q);pl.x=d.sx+(d.ex-d.sx)*ease;pl.z=d.sz+(d.ez-d.sz)*ease;vx=0;vz=0;if(q>=1)pl.lightningDash=null}
+  pl.pose=p;const phase=Math.min(1,pl.atkT/a.dur);vis.rotation.y=Math.sin(phase*PI)*(.16+(pl.i===2?.18:0));torso.rotation.x=Math.sin(phase*PI)*-.16;torso.rotation.z=Math.sin(phase*PI*2)*.12;vis.position.y=Math.sin(phase*PI)*.06;armL.rotation.x=-.45-Math.sin(phase*PI)*.55;armL.rotation.z=.18+Math.sin(phase*PI)*.3;sword.rotation.x=-2.48+Math.sin(phase*PI)*-.55;sword.rotation.z=(pl.i===1?-.25:pl.i===2?.35:.12)+Math.sin(phase*PI*2)*.28; if(pl.i===2&&pl.skills.lightning&&!pl.lightningDone&&pl.atkT>=a.ts){pl.lightningDone=true;lightningCut()}if(pl.lightningDash){const d=pl.lightningDash;d.t+=dt;const q=Math.min(1,d.t/d.dur),ease=q*q*(3-2*q);pl.x=d.sx+(d.ex-d.sx)*ease;pl.z=d.sz+(d.ez-d.sz)*ease;vx=0;vz=0;if(q>=1)pl.lightningDash=null}
   if(pl.atkT>=a.ts&&pl.atkT<=a.te){if(slashT<=0){slashT=.32;slashMat.color.setHex(pl.skills.swordPath==='fire'?0xff2a1a:pl.werewolf?0xff563d:pl.i===2&&pl.skills.lightning?0x66e8ff:a.heavy?0xffd36b:0xfff0bd);slashGlow.material.color.setHex(pl.skills.swordPath==='fire'?0xff5a12:pl.i===2&&pl.skills.lightning?0x168fff:a.heavy?0xff7a28:0xffb64d)}sword.localToWorld(tmp.set(0,-1.6,0));spark(tmp,pl.skills.swordPath==='fire'?0xff4a1a:(a.heavy?0xffe08a:0xfff2c8),2,2,.12,2);
    for(const e of enemies){if(e.dead||pl.hit.has(e))continue;const dx=e.x-pl.x,dz=e.z-pl.z,d=Math.hypot(dx,dz);if(d>a.rng+.5)continue;if(d>1&&Math.abs(angDiff(Math.atan2(dx,dz),pl.face))>a.arc/2*PI/180)continue;pl.hit.add(e);hitEnemy(e,a,dx/(d||1),dz/(d||1))}}
   if(pl.atkT>=a.dur){if(pl.werewolf){wolfArms.forEach(a=>a.rotation.set(0,0,0));wolfLegs.forEach(l=>l.rotation.set(0,0,0));}vis.rotation.y=0;vis.position.y=0;torso.rotation.x=0;torso.rotation.z=0;sword.rotation.set(0,0,0);pl.last=pl.i;pl.lastEnd=pl.t;pl.combat=1.8;if(pl.queued&&pl.i<2)startAttack(pl.i+1);else{pl.state='idle';pl.pose={...GUARD}}}}
  else if(pl.state!=='dodge'){vis.rotation.y+=(0-vis.rotation.y)*Math.min(1,12*dt);vis.position.y+=(0-vis.position.y)*Math.min(1,12*dt);torso.rotation.x+=(0-torso.rotation.x)*Math.min(1,12*dt);torso.rotation.z+=(0-torso.rotation.z)*Math.min(1,12*dt);pl.combat=Math.max(0,pl.combat-dt);const ready=(!pl.weapon&&pl.combat>0)?GUARD:REST;pl.pose=lerpPose(pl.pose,pl.weapon?{x:-.72-pl.rec*.25,y:0,z:0,t:0}:ready,Math.min(1,12*dt));pl.rec=Math.max(0,pl.rec-dt*5)}
  if(pl.state==='dodge'){pl.st+=dt;const D=DODGE.duration,k=Math.min(1,pl.st/D),phase=k<DODGE.startup/D?0:k<(DODGE.startup+DODGE.iframes)/D?1:2;const travel=(pl.werewolf?(pl.rollBack?4.2:6.2):DODGE.distance)/D;vx=pl.dx*travel;vz=pl.dz*travel;const tuck=Math.sin(Math.min(1,k*1.35)*PI);if(pl.rollBack){vis.rotation.x=-.08-.16*tuck;vis.position.y=.08+tuck*.07;}else{{const th=PI*2*k,pe=1.05,lift=.04+.3*Math.sin(k*PI);vis.scale.set(1,.90,1);vis.position.y=pe-pe*Math.cos(th)+lift;if(pl.rollSide){vis.rotation.x=0;vis.rotation.z=-pl.rollSide*th;vis.position.x=-pl.rollSide*pe*Math.sin(th);vis.position.z=0}else{vis.rotation.x=th;vis.rotation.z=0;vis.position.z=-pe*Math.sin(th);vis.position.x=0}}}if(pl.rollBack)vis.rotation.z=0;if(!pl.rollBack){if(pl.rollSide){torso.rotation.x=.5;legL.rotation.x=-.95;legR.rotation.x=-.95}else{torso.rotation.x=.62;legL.rotation.x=-.72;legR.rotation.x=.72}}else{torso.rotation.x=-.12-.12*tuck;legL.rotation.x=-.55*tuck;legR.rotation.x=.38*tuck;}if(pl.st>=D){pl.state='idle';pl.iframe=0;vis.position.set(0,0,0);vis.rotation.set(0,0,0);vis.scale.set(1,1,1);vis.position.set(0,0,0);torso.rotation.set(0,0,0);legL.rotation.set(0,0,0);legR.rotation.set(0,0,0);pl.pose={...GUARD};pl.combat=.8;const queued=pl.dodgeQueued;pl.dodgeQueued=false;if(queued&&pl.stamina>0){want.dodge=true;pl.dcd=0}}}
  pl.x+=vx*dt;pl.z+=vz*dt;push(pl,.45);pl.y=hgt(pl.x,pl.z);
- pl.walk+=dt*(moving?11:0);const sw=moving?.8:0;if(pl.state==='attack'){const q=Math.sin(Math.min(1,pl.atkT/ATK[pl.i].dur)*PI);if(pl.werewolf){wolfArms[0].rotation.x=-q*1.35;wolfArms[1].rotation.x=-q*1.35;wolfArms[0].rotation.z=q*.65;wolfArms[1].rotation.z=-q*.65;wolfLegs[0].rotation.x=-q*.45;wolfLegs[1].rotation.x=q*.45;}legL.rotation.x=-.35-q*.8;legR.rotation.x=.25+q*.65;legL.rotation.z=-.08;legR.rotation.z=.08}else{legL.rotation.x=Math.sin(pl.walk)*sw;legR.rotation.x=-Math.sin(pl.walk)*sw;legL.rotation.z=0;legR.rotation.z=0}if(pl.state!=='attack')armL.rotation.x=-Math.sin(pl.walk)*sw*.8;if(pl.werewolf){wolfLegs[0].rotation.x=Math.sin(pl.walk)*sw;wolfLegs[1].rotation.x=-Math.sin(pl.walk)*sw;wolfLegs[2].rotation.x=-Math.sin(pl.walk)*sw;wolfLegs[3].rotation.x=Math.sin(pl.walk)*sw;wolfArms[0].rotation.x=-Math.sin(pl.walk)*sw*.7;wolfArms[1].rotation.x=Math.sin(pl.walk)*sw*.7;}
+ pl.walk+=dt*(moving?11:0);const sw=moving?.8:0;if(pl.state==='attack'){const phase=Math.min(1,pl.atkT/ATK[pl.i].dur),q=Math.sin(phase*PI),wind=Math.sin(Math.min(1,phase*2)*PI/2),follow=Math.sin(Math.max(0,(phase-.42)/.58)*PI);if(!pl.weapon&&!pl.werewolf){armR.rotation.x=-1.15+wind*1.55-follow*.9;armR.rotation.z=-.35+q*.85;armL.rotation.x=-.75+q*.45;armL.rotation.z=.25-q*.5;torso.rotation.y=(pl.i===1?-.55:pl.i===2?.62:-.35)*q;torso.rotation.x=-.12+wind*.24-follow*.16;sword.rotation.x=-2.48-wind*.85+follow*1.35;sword.rotation.y=(pl.i===1?-.65:pl.i===2?.72:.25)*q;sword.rotation.z=(pl.i===1?.45:pl.i===2?-.5:.25)*q;}if(pl.werewolf){wolfArms[0].rotation.x=-q*1.35;wolfArms[1].rotation.x=-q*1.35;wolfArms[0].rotation.z=q*.65;wolfArms[1].rotation.z=-q*.65;wolfLegs[0].rotation.x=-q*.45;wolfLegs[1].rotation.x=q*.45;}legL.rotation.x=-.35-q*.8;legR.rotation.x=.25+q*.65;legL.rotation.z=-.08;legR.rotation.z=.08}else{legL.rotation.x=Math.sin(pl.walk)*sw;legR.rotation.x=-Math.sin(pl.walk)*sw;legL.rotation.z=0;legR.rotation.z=0}if(pl.state!=='attack')armL.rotation.x=-Math.sin(pl.walk)*sw*.8;if(pl.werewolf){wolfLegs[0].rotation.x=Math.sin(pl.walk)*sw;wolfLegs[1].rotation.x=-Math.sin(pl.walk)*sw;wolfLegs[2].rotation.x=-Math.sin(pl.walk)*sw;wolfLegs[3].rotation.x=Math.sin(pl.walk)*sw;wolfArms[0].rotation.x=-Math.sin(pl.walk)*sw*.7;wolfArms[1].rotation.x=Math.sin(pl.walk)*sw*.7;}
  armR.rotation.set(pl.pose.x,pl.pose.y,pl.pose.z);poseWeaponArms(dt);torso.rotation.y=pl.pose.t;if(pl.swapT>0)swapAnim(dt);
  if(slashT>0){slashT=Math.max(0,slashT-dt);const f=slashT/.32;slashFx.visible=true;slashMat.opacity=.95*f;slashGlow.material.opacity=.5*f;slashFx.scale.set(1.05+(1-f)*.55,.9+(1-f)*.25,1);slashFx.rotation.z=(pl.i===1?-.8:pl.i===2?.85:.2)+(1-f)*.6;}else slashFx.visible=false;
  root.position.set(pl.x,pl.y,pl.z);root.rotation.y=pl.face;setWolfForm(false);
@@ -505,6 +512,12 @@ const merchant=new THREE.Group();{
  const staffTop=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8),cloth);staffTop.position.set(.57,2.18,.1);
  const belt=new THREE.Mesh(new THREE.TorusGeometry(.34,.055,6,16),leather);belt.rotation.x=PI/2;belt.position.y=.52;
  merchant.add(body,hood,face,cloak,pack,strap,staff,staffTop,belt);
+  // Layered rough cloth, seams, and small talismans give the merchant a hand-crafted silhouette.
+  const robeFoldMat=mat(0x503022),seamMat=mat(0xc09a67),ornMat=mat(0x9b762e);
+  for(let i=0;i<5;i++){const fold=new THREE.Mesh(new THREE.ConeGeometry(.055,.72,5),robeFoldMat);fold.position.set(-.23+i*.115,.34,.19);fold.rotation.z=(i-2)*.045;merchant.add(fold)}
+  for(let i=0;i<3;i++){const stitch=new THREE.Mesh(new THREE.BoxGeometry(.025,.22,.025),seamMat);stitch.position.set(.18+i*.04,.58,.26);stitch.rotation.z=-.25;merchant.add(stitch)}
+  const charm=new THREE.Mesh(new THREE.SphereGeometry(.075,10,8),ornMat);charm.position.set(-.22,.48,.31);merchant.add(charm);
+
  merchant.position.set(-7,hgt(-7,6),6);merchant.rotation.y=-.7;scene.add(merchant);
  const lamp=new THREE.PointLight(0xffb54a,1.3,7);lamp.position.set(-7,2.5,6);scene.add(lamp)}
 let merchantWasPaused=false;function openMerchant(tab){tab=tab||'loja';if($('modal').classList.contains('hide'))merchantWasPaused=paused;paused=true;const d=document.createElement('div');

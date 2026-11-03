@@ -1,0 +1,5 @@
+Correção da tela preta:
+- Substituída a geometria THREE.CapsuleGeometry (incompatível com Three.js r128)
+  por THREE.CylinderGeometry, mantendo os dedos do personagem.
+- Sintaxe JavaScript validada com Node.js.
+Observação: teste visual final ainda deve ser feito no navegador do usuário.
