@@ -17,3 +17,11 @@
 
 ## Observações
 - JavaScript validado com `node --check` e simulado sem navegador (ataques, rolagens, troca de arma, inventário, fogo, onda noturna). Não foi possível conferir o visual no navegador; ajustes de proporção dos chapéus e das poses podem ser necessários.
+
+---
+
+# Segunda atualização
+- Música do lobisomem: ao começar a noite, a música atual para e toca "Vaqueiro Entoada" ou "Vaqueiro Entoada 2" (alternando, sem repetir em seguida). Essas duas faixas saíram da rotação normal e só tocam na fase do lobisomem. Ao amanhecer, volta a rotação normal.
+- Máscaras no mercador (aba Roupas): Máscara Tengu (90 moedas) e Máscara Oni (110 moedas), modeladas a partir das fotos.
+- Nível máximo (5) das trilhas: com a Trilha das Chamas, a espada e a arma de fogo ganham chamas animadas; com a Trilha do Raio, ganham raios animados em azul-ciano.
+- Arqueiros viraram pistoleiros (o arqueiro comum ganhou chapéu; o esquelético mantém o crânio e o elmo). Disparam balas com o mesmo som do tiro da arma do jogador. A lógica de combate é a mesma, incluindo "Repelir projéteis".

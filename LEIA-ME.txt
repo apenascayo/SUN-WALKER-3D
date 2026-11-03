@@ -18,4 +18,4 @@ Atualização boss lobisomem:
 - Rolagem frontal corrigida para cambalhota para a frente; rolagem traseira mantém o pulinho.
 - Removida a dilatação global de tempo que desacelerava ataques em certas situações.
 
-Atualização completa: veja CHANGELOG_ATUALIZACAO_COMPLETA.md (troca de arma animada, rolagem lateral, marcador de inimigo, tecla I, chamas, roupas, lobisomens menores).
+Atualização completa: veja CHANGELOG_ATUALIZACAO_COMPLETA.md.
