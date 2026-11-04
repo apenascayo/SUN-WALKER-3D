@@ -1,25 +1,24 @@
 const AUDIO_ROOT = 'assets/audio/';
 const MUSIC_TRACKS = [
-    'music_baiao_determinado.wav',
-    'music_lampadas_1.wav',
-    'music_lampadas_2.wav',
-    'music_shakuhachi_1.wav',
-    'music_shakuhachi_2.wav'
+    'combaiao_determinado.wav',
+    'sertao_de_lampadas_1.wav',
+    'sertao_do_shakuhachi.wav',
+    'sertao_do_shakuhachi_2.wav'
 ];
 const SFX_FILES = {
     merchant: 'merchant.mp3', shield: 'shield.mp3', sword: 'sword.mp3', arrow: 'arrow.mp3',
     bainha: 'bainha.mp3', balas: 'balas.mp3', bomba: 'bomba.mp3', coins: 'coins.mp3',
     cura: 'cura.mp3', danoeletrico: 'danoeletrico.mp3', dash: 'dash.mp3', hurtnpc: 'hurtnpc.mp3',
-    level: 'level.mp3', magic: 'magic.mp3', mudancaarma: 'weapon_swap.mp3',
+    level: 'level.mp3', magic: 'magic.mp3', mudancaarma: 'mudançaarma.mp3',
     nunlaugh: 'nun-laugh.mp3', openbag: 'openbag.mp3', recharge: 'recharge-gun.wav',
     somdor: 'somdor.mp3', sowrdinimigo: 'sowrdinimigo.mp3', swordnpc: 'swordnpc.mp3',
     trabuco: 'trabuco.mp3', waveup: 'waveup.mp3', xp: 'xp.mp3'
 };
-const WOLF_TRACKS = ['music_vaqueiro_1.wav', 'music_vaqueiro_2.wav'];
+const WOLF_TRACKS = ['vaqueiro_entoada.wav', 'vaqueiro_entoada_2.wav'];
 
 export function createAudio(S) {
     const sfxCache = {};
-    for (const [key, file] of Object.entries(SFX_FILES)) { const a = new Audio(AUDIO_ROOT + 'sfx/' + file); a.preload = 'auto'; sfxCache[key] = a }
+    for (const [key, file] of Object.entries(SFX_FILES)) { const a = new Audio(encodeURI(AUDIO_ROOT + 'sfx/' + file)); a.preload = 'auto'; sfxCache[key] = a }
     const musicAudio = new Audio(); musicAudio.preload = 'auto'; musicAudio.loop = false;
     let musicOrder = [], musicIndex = 0, musicStarted = false;
     let musicMode = 'normal', lastWolf = '';
@@ -28,7 +27,7 @@ export function createAudio(S) {
 
     function shuffleMusic() { musicOrder = [...MUSIC_TRACKS]; for (let i = musicOrder.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[musicOrder[i], musicOrder[j]] = [musicOrder[j], musicOrder[i]] } musicIndex = 0 }
     function setMusicMode(m) { if (m === musicMode) return; musicMode = m; if (musicStarted) playNextMusic() }
-    function playNextMusic() { let track; if (musicMode === 'wolf') { const o = WOLF_TRACKS.filter(t => t !== lastWolf); track = lastWolf = o[Math.floor(Math.random() * o.length)] } else { if (!musicOrder.length || musicIndex >= musicOrder.length) shuffleMusic(); track = musicOrder[musicIndex++] } musicAudio.src = AUDIO_ROOT + 'music/' + track; musicAudio.volume = Math.max(0, Math.min(1, S.master * S.music)); musicAudio.play().catch(() => { }); }
+    function playNextMusic() { let track; if (musicMode === 'wolf') { const o = WOLF_TRACKS.filter(t => t !== lastWolf); track = lastWolf = o[Math.floor(Math.random() * o.length)] } else { if (!musicOrder.length || musicIndex >= musicOrder.length) shuffleMusic(); track = musicOrder[musicIndex++] } musicAudio.src = encodeURI(AUDIO_ROOT + 'music/' + track); musicAudio.volume = Math.max(0, Math.min(1, S.master * S.music)); musicAudio.play().catch(() => { }); }
     function startMusic() { if (musicStarted) return; musicStarted = true; shuffleMusic(); playNextMusic() }
     musicAudio.addEventListener('ended', playNextMusic);
     function playSfx(key, mult = 1) { const base = sfxCache[key]; if (!base) return; const a = base.cloneNode(); a.volume = Math.max(0, Math.min(1, S.master * S.sfx * mult)); a.currentTime = 0; a.play().catch(() => { }); return a; }
