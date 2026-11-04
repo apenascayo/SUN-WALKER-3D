@@ -8,7 +8,7 @@ O jogo usa módulos ES e `@import` de CSS, então precisa ser servido por HTTP. 
 
 Também precisa de internet na primeira carga: Three.js e as fontes vêm de CDN.
 
-Na pasta do projeto:
+Na pasta do projeto: 
 
 ```bash
 npx --yes serve src
