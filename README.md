@@ -8,6 +8,8 @@ O jogo usa módulos ES e `@import` de CSS, então precisa ser servido por HTTP. 
 
 Também precisa de internet na primeira carga: Three.js e as fontes vêm de CDN.
 
+Abrir com Live-Server ja é o bastante, mas também pode-se usar as seguintes opções:
+
 Na pasta do projeto: 
 
 ```bash
