@@ -1,0 +1,11 @@
+:root {
+  color-scheme: dark;
+  --gold: #e8b23a;
+  --blood: #c23a2c;
+  --volt: #4fc3ff;
+  --tx: #f6e6c8;
+  --bg: #2a1a12;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px)
+}

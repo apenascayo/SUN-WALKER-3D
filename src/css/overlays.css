@@ -1,0 +1,121 @@
+.ov {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at 50% 70%, #7a3b1d99, #1d0f09ee)
+}
+
+.ov h1 {
+  font: 700 clamp(44px, 9vw, 92px) Almendra, serif;
+  margin: 0;
+  color: var(--gold);
+  text-shadow: 0 4px 0 #6b2a12, 0 0 40px #e8803a66;
+  letter-spacing: .04em
+}
+
+.ov p {
+  margin: 0;
+  max-width: 520px;
+  font-size: 19px;
+  line-height: 1.45
+}
+
+.ov button {
+  font: 700 20px 'Alegreya Sans', sans-serif;
+  padding: 12px 30px;
+  background: var(--gold);
+  color: #2a1a12;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer
+}
+
+.ov button:focus-visible {
+  outline: 3px solid var(--volt);
+  outline-offset: 3px
+}
+
+#fade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 1;
+  transition: opacity 1.2s;
+  pointer-events: none;
+  z-index: 40
+}
+
+#skip {
+  display: none;
+  position: absolute;
+  right: 18px;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  z-index: 41;
+  background: #0008;
+  color: var(--tx);
+  border: 1px solid #e8b23a66;
+  padding: 8px 14px;
+  font: 700 16px 'Alegreya Sans', sans-serif;
+  cursor: pointer
+}
+
+body[data-m=intro] #skip {
+  display: block
+}
+
+#menu {
+  background: linear-gradient(90deg, #1d0f09e6 0, #1d0f0966 55%, transparent);
+  align-items: flex-start;
+  text-align: left;
+  padding-left: 7vw
+}
+
+#menu .sub {
+  opacity: .85
+}
+
+.hint {
+  font-size: 15px !important;
+  opacity: .7
+}
+
+.mb {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(300px, 80vw)
+}
+
+.mb button {
+  background: #1d0f09aa;
+  color: var(--tx);
+  border: 1px solid #e8b23a55;
+  text-align: left;
+  transition: transform .15s, background .15s, color .15s
+}
+
+.mb button:hover:not(:disabled),
+.mb button:focus-visible {
+  background: var(--gold);
+  color: #2a1a12;
+  transform: translateX(10px)
+}
+
+.mb button:active:not(:disabled) {
+  transform: translateX(10px) scale(.97)
+}
+
+.mb button:disabled {
+  opacity: .35;
+  cursor: not-allowed
+}
+
+.hide {
+  display: none
+}
