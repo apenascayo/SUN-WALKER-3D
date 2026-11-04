@@ -1,0 +1,39 @@
+#minimap {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 184px;
+  height: 184px;
+  z-index: 6;
+  border: 2px solid #e8b23a99;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #160f0bcc;
+  box-shadow: 0 3px 18px #0009;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .5s
+}
+
+#minimap canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%
+}
+
+#minimap span {
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font: 700 11px Almendra, serif;
+  letter-spacing: .14em;
+  color: #f2d08b;
+  text-shadow: 0 1px 3px #000
+}
+
+body[data-m=play] #minimap {
+  opacity: 1
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sun Walker — Primeira entrega 3D</title>
+  <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@700&family=Alegreya+Sans:wght@500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+  <canvas id="c"></canvas>
+  <div id="minimap"><canvas id="mapCanvas" width="368" height="368"></canvas><span>MAPA</span></div>
+  <div id="hud">
+    <div class="l">
+      <div id="lv">1</div>
+      <div class="bars">
+        <div class="bar hp"><i id="hp"></i><span id="hpt"></span></div>
+        <div class="bar xp"><i id="xp"></i></div>
+      </div>
+    </div>
+    <div class="r">
+      <div id="coins">0 moedas</div>
+      <div><span id="wn">Espada</span><span id="pips"><u></u><u></u><u></u></span><span id="am" style="display:none"> ·
+          balas 30</span></div>
+      <div class="bar dg"><i id="dg"></i></div>
+      <div class="bar stamina"><i id="stamina"></i></div>
+    </div>
+  </div>
+  <button id="skillBtn" class="hide">✦ Habilidades [T]</button>
+  <div id="merchantHint"
+    style="display:none;position:absolute;bottom:220px;left:50%;transform:translateX(-50%);padding:8px 14px;background:#1d0f09e8;border:1px solid #e8b23a;color:#f6e6c8;font-weight:700;z-index:9;pointer-events:none">
+    [E] Falar com o mercador</div>
+  <div id="flash"></div>
+  <div id="fade"></div>
+  <div id="wv"><b id="wn2"></b><span id="wr"></span></div>
+  <div id="boss"><span id="bname"></span>
+    <div class="bar hp"><i id="bhp"></i></div>
+  </div>
+  <div id="bn"></div><button id="skip">Pular introdução (Enter)</button>
+  <div id="toast"></div>
+  <div id="menu" class="ov">
+    <h1>SUN WALKER</h1>
+    <p class="sub">Fantasia sombria no sertão pernambucano</p>
+    <div class="mb"><button id="mNew">Novo jogo</button><button id="mCont">Continuar</button><button
+        id="mSet">Configurações</button><button id="mCred">Créditos</button><button id="mExit">Sair</button></div>
+    <p class="hint">WASD move · clique/J ataca · Shift/Espaço rola · R troca arma · T habilidades · ESC pausa</p>
+  </div>
+  <div id="dead" class="ov hide">
+    <h1>Você caiu</h1>
+    <p>O sol se pôs sobre você. Nível <b id="dlv"></b>, <b id="dco"></b> moedas.</p>
+    <div class="mb" style="align-items:stretch"><button id="again">Repetir esta onda</button><button id="dmenu">Menu
+        inicial</button></div>
+  </div>
+  <div id="pause" class="ov hide">
+    <h1 style="font-size:56px">Pausado</h1>
+    <div class="mb" style="align-items:stretch"><button id="pC">Continuar</button><button
+        id="pI">Inventário</button><button id="pSkills">Árvore de habilidades</button><button
+        id="pS">Configurações</button><button id="pM">Menu inicial</button></div>
+  </div>
+  <div id="modal" class="ov hide">
+    <div id="mc"></div>
+  </div>
+  <div id="keep" class="hide">Manter alterações de vídeo? Revertendo em <b id="kt">10</b>s <button
+      id="kY">Manter</button><button id="kN">Reverter</button></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+#flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(transparent 40%, #c23a2c);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s
+}
+
+#toast {
+  position: absolute;
+  top: 22%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font: 700 38px Almendra, serif;
+  color: var(--gold);
+  text-shadow: 0 2px 8px #000;
+  opacity: 0;
+  transition: opacity .4s;
+  pointer-events: none
+}
+
+.dn {
+  position: absolute;
+  font-weight: 700;
+  font-size: 20px;
+  text-shadow: 0 1px 3px #000;
+  pointer-events: none;
+  transform: translate(-50%, -50%)
+}
+
+#bn {
+  position: absolute;
+  top: 28%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .5s;
+  pointer-events: none;
+  padding: 0 16px
+}
+
+#bn.on {
+  opacity: 1
+}
+
+#bn h2 {
+  font: 700 clamp(32px, 6vw, 58px) Almendra, serif;
+  margin: 0;
+  color: var(--gold);
+  text-shadow: 0 3px 0 #6b2a12, 0 0 30px #000
+}
+
+#bn p {
+  margin: 4px 0 0;
+  font-size: 20px;
+  text-shadow: 0 1px 4px #000
+}
+
+.pop {
+  animation: pop .35s
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.3);
+    color: var(--gold)
+  }
+}
+
+.hit {
+  animation: shk .25s
+}
+
+@keyframes shk {
+  25% {
+    transform: translateX(-4px)
+  }
+
+  75% {
+    transform: translateX(4px)
+  }
+}
+
+.low i {
+  animation: lowp .7s infinite alternate
+}
+
+@keyframes lowp {
+  to {
+    filter: brightness(1.8)
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+
+  .pop,
+  .hit,
+  .low i {
+    animation: none
+  }
+}
