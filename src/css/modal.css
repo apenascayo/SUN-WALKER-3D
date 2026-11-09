@@ -136,6 +136,17 @@
   padding: 4px 10px
 }
 
+.inventory-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; padding: 12px; background: #100d0a; border: 3px solid #755531; border-radius: 5px }
+.inventory-slot, .ov button.inventory-slot { position: relative; display: grid; place-items: center; width: 100%; min-width: 0; min-height: 62px; padding: 5px; background: #342c20; border: 1px solid #7d6a4b; border-radius: 0; color: #f7e4bf; cursor: pointer }
+.inventory-slot:disabled { cursor: default; opacity: .45 }
+.inventory-slot:not(:disabled):hover, .inventory-slot:not(:disabled):focus-visible { background: #57412a; outline: 2px solid #e8b23a }
+.inventory-slot .item-icon { width: 42px; height: 42px }
+.inventory-slot small { position: absolute; right: 3px; bottom: 1px; font-weight: 700 }
+.inventory-slot.equipped, .ov button.inventory-slot.equipped { border: 2px solid #e8b23a }
+.inventory-swatch { width: 32px; height: 32px; border: 2px solid #e7d5b3; border-radius: 50% }
+#inventoryDetail { min-height: 38px; color: #eed9ac }
+@media (max-width: 500px) { .inventory-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) } .inventory-slot { min-height: 54px } }
+
 #keep {
   position: fixed;
   bottom: 24px;

@@ -3,7 +3,7 @@ import { rnd, tmp } from './math.js';
 import { readSave, loadSkills } from './save.js';
 import { createGame, update, camUpdate } from './game.js';
 import { bindUI, bindInput, hud, refreshMenu } from './ui.js';
-import { REST } from './player/controller.js';
+import { REST, clearScytheThrow } from './player/controller.js';
 import { hgt } from './world.js';
 
 const game = createGame();
@@ -13,11 +13,13 @@ function setMode(m) { game.mode = m; game.running = m === 'play'; document.body.
 
 function reset() {
     game.clearInputs();
+    clearScytheThrow(game);
+    if (pl.scytheAction?.projectile) scene.remove(pl.scytheAction.projectile);
     pl.skills = loadSkills();
     game.sheathVisual.visible = !!pl.skills.sheath; game.slashT = 0; game.slashFx.visible = false;
     game.enemies.forEach(e => scene.remove(e.g)); game.enemies.length = 0;
     game.coinsA.forEach(c => scene.remove(c)); game.coinsA.length = 0;
-    Object.assign(pl, { x: 0, z: 2, hp: 100, max: 100, lv: 1, xp: 0, coins: 0, ammo: 30, potions: 0, werewolf: false, stamina: 100, state: 'idle', last: -1, dcd: 0, iframe: 0, buf: 0, combat: 0, rollSide: 1, para: 0, lightningDash: null, pose: { ...REST } });
+    Object.assign(pl, { x: 0, z: 2, hp: 100, max: 100, lv: 1, xp: 0, coins: 0, ammo: 0, ammoBoxes: 0, gunOwned: false, weaponOwned: false, scytheAction: null, scytheCd: 0, scytheMode: 'scythe', potions: 0, werewolf: false, stamina: 100, state: 'idle', last: -1, dcd: 0, iframe: 0, buf: 0, combat: 0, rollSide: 1, para: 0, lightningDash: null, swordVault: null, pose: { ...REST } });
     game.setWolfForm(false); vis.rotation.x = 0; vis.scale.y = 1; vis.position.set(0, 0, 0); pl.swapT = 0; game.setWeapon(0);
     game.bullets.forEach(b => scene.remove(b.m)); game.bullets.length = 0;
     game.waves.reset(); game.audio.setMusicMode('normal'); game.nightTarget = 0; game.nightMix = 0;
@@ -37,13 +39,13 @@ function skipIntro() {
 
 function startGame(cont, skip) {
     game.clearInputs();['menu', 'dead', 'pause'].forEach(i => $(i).classList.add('hide')); game.paused = false; reset();
-    const sv = cont ? readSave() : null; if (sv) { Object.assign(pl, { lv: sv.lv, xp: sv.xp, max: sv.max, hp: sv.max, coins: sv.coins, ammo: sv.ammo ?? 30, potions: sv.potions || 0, magnetLevel: sv.magnetLevel || 0, skills: { ...pl.skills, ...(sv.skills || {}) } }); game.setWeapon(sv.weapon || 0); game.waves.n = sv.wave }
+    const sv = cont ? readSave() : null; if (sv) { Object.assign(pl, { lv: sv.lv, xp: sv.xp, max: sv.max, hp: sv.max, coins: sv.coins, ammo: sv.ammo ?? 0, ammoBoxes: sv.ammoBoxes || 0, gunOwned: sv.gunOwned ?? true, weaponOwned: !!sv.weaponOwned, potions: sv.potions || 0, magnetLevel: sv.magnetLevel || 0, skills: { ...pl.skills, ...(sv.skills || {}) } }); game.setWeapon(sv.weapon === 2 && pl.weaponOwned ? 2 : sv.weapon === 1 && pl.gunOwned ? 1 : 0); game.waves.n = sv.wave }
     $('fade').style.opacity = 1;
     if (cont || skip) setTimeout(() => { $('fade').style.opacity = 0; beginPlay() }, 500); else { game.intro = { t: 0 }; setMode('intro'); setTimeout(() => $('fade').style.opacity = 0, 300) }
 }
 
 function retryCurrentWave() {
-    game.clearInputs(); $('dead').classList.add('hide'); game.paused = false; pl.hp = pl.max; pl.stamina = pl.staminaMax; pl.state = 'idle'; pl.x = 0; pl.z = 2; pl.iframe = 1.5; pl.para = 0; pl.pose = { ...REST }; vis.rotation.set(0, 0, 0); vis.position.set(0, 0, 0);
+    game.clearInputs(); clearScytheThrow(game); if (pl.scytheAction?.projectile) scene.remove(pl.scytheAction.projectile); pl.scytheAction = null; $('dead').classList.add('hide'); game.paused = false; pl.hp = pl.max; pl.stamina = pl.staminaMax; pl.state = 'idle'; pl.x = 0; pl.z = 2; pl.iframe = 1.5; pl.para = 0; pl.pose = { ...REST }; vis.rotation.set(0, 0, 0); vis.position.set(0, 0, 0);
     game.enemies.forEach(e => scene.remove(e.g)); game.enemies.length = 0; game.enemyArrows.forEach(a => scene.remove(a.m)); game.enemyArrows.length = 0; game.coinsA.forEach(c => scene.remove(c)); game.coinsA.length = 0; game.bullets.forEach(b => scene.remove(b.m)); game.bullets.length = 0;
     game.waves.q = game.waves.plan(Math.max(1, game.waves.n)); game.waves.st = 'active'; game.waves.sp = .8; game.waves.atkMax = Math.min(4, 2 + Math.floor(Math.max(1, game.waves.n) / 3));
     game.setNight(game.waves.n > 0 && game.waves.n % 5 === 0); setMode('play'); $('skillBtn').classList.remove('hide'); game.save()

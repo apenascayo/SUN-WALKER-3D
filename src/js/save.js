@@ -2,7 +2,7 @@ export function readSave() { try { return JSON.parse(localStorage.getItem('sw_sa
 
 export function save(game) {
     const { pl, waves } = game;
-    try { localStorage.setItem('sw_save', JSON.stringify({ lv: pl.lv, xp: pl.xp, max: pl.max, coins: pl.coins, weapon: pl.weapon, ammo: pl.ammo, wave: waves.n, potions: pl.potions || 0, magnetLevel: pl.magnetLevel || 0, skills: pl.skills })) } catch (e) { }
+    try { localStorage.setItem('sw_save', JSON.stringify({ lv: pl.lv, xp: pl.xp, max: pl.max, coins: pl.coins, weapon: pl.weapon, weaponOwned: !!pl.weaponOwned, gunOwned: !!pl.gunOwned, ammo: pl.ammo, ammoBoxes: pl.ammoBoxes || 0, wave: waves.n, potions: pl.potions || 0, magnetLevel: pl.magnetLevel || 0, skills: pl.skills })) } catch (e) { }
 }
 
 export function saveSkills(game) {

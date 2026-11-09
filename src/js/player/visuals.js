@@ -93,10 +93,22 @@ export function createPlayerVisuals(scene) {
     setHat(COS.hat); setShirt(COS.shirt);
     const armL = limb(.2, .7, SKIN, -.43, .62, torso), armR = limb(.2, .7, SKIN, .43, .62, torso);
     for (const a of [armL, armR]) { const hand = new THREE.Mesh(new THREE.SphereGeometry(.105, 10, 8), mat(SKIN)); hand.position.set(0, -.72, .025); a.add(hand); for (let f = 0; f < 3; f++) { const finger = new THREE.Mesh(new THREE.CylinderGeometry(.022, .028, .13, 6), mat(SKIN)); finger.position.set((f - 1) * .045, -.76, .09); finger.rotation.x = -.5; a.add(finger) } }
-    const sword = new THREE.Group(); sword.position.set(.02, .13, .53); sword.rotation.x = -2.48; torso.add(sword);
+    const sword = new THREE.Group(); sword.position.set(0, -.7, .08); sword.rotation.x = -2.48; armR.add(sword);
     box(.075, .30, .075, 0x4a2c18, 0, -.08, 0, sword); box(.40, .055, .10, 0xe8b23a, 0, -.25, 0, sword);
-    const blade = box(.105, 1.42, .035, 0xdfe6ec, 0, -.99, 0, sword); blade.material.emissive = new THREE.Color(0x223344); const sheathVisual = box(.12, .82, .13, LEATH, .34, .42, -.2, vis); sheathVisual.rotation.z = -.12; sheathVisual.visible = false;
+    const blade = box(.105, 1.42, .035, 0xdfe6ec, 0, -.99, 0, sword); blade.material.emissive = new THREE.Color(0x223344);
+    const swordLeft = sword.clone(true); armL.add(swordLeft);
+    const sheathVisual = box(.12, .82, .13, LEATH, .34, .42, -.2, vis); sheathVisual.rotation.z = -.12; sheathVisual.visible = false;
     const gun = new THREE.Group(); gun.position.set(0, .22, .54); gun.visible = false; torso.add(gun);
+    // Arma híbrida: cabo longo, lâmina curva de foice e cabeça pesada de marreta.
+    const scythe = new THREE.Group(); scythe.position.set(0, .12, .48); scythe.visible = false; torso.add(scythe);
+    const scytheHandle = new THREE.Mesh(new THREE.CylinderGeometry(.045, .06, 1.65, 8), mat(0x49301d)); scytheHandle.rotation.x = -.18; scytheHandle.position.y = -.55; scythe.add(scytheHandle);
+    const gripA = new THREE.Mesh(new THREE.TorusGeometry(.065, .018, 5, 10), mat(0xb58a4a)); gripA.position.set(0, -.05, 0); scythe.add(gripA);
+    const hammerHead = new THREE.Mesh(new THREE.BoxGeometry(.66, .28, .26), mat(0x45464a)); hammerHead.position.set(.28, .25, 0); scythe.add(hammerHead);
+    const hammerCap = new THREE.Mesh(new THREE.BoxGeometry(.12, .34, .32), mat(0x9b8155)); hammerCap.position.set(.62, .25, 0); scythe.add(hammerCap);
+    const scytheBlade = new THREE.Mesh(new THREE.TorusGeometry(.48, .075, 8, 24, Math.PI * .78), mat(0xcbd1d5)); scytheBlade.position.set(-.36, .42, 0); scytheBlade.rotation.z = Math.PI * .12; scythe.add(scytheBlade);
+    const scytheBladeTip = new THREE.Mesh(new THREE.ConeGeometry(.09, .28, 6), mat(0xdfe5e8)); scytheBladeTip.position.set(-.72, .64, 0); scytheBladeTip.rotation.z = -.8; scythe.add(scytheBladeTip);
+    const tetherCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(-.68, .55, .02), new THREE.Vector3(-.38, .18, .08), new THREE.Vector3(.02, .08, .08), new THREE.Vector3(.28, .25, .02)]);
+    const tether = new THREE.Mesh(new THREE.TubeGeometry(tetherCurve, 16, .018, 5, false), mat(0x8b6840)); scythe.add(tether);
     box(.19, .16, .58, 0x4b2b1b, 0, -.015, -.20, gun); box(.22, .13, .32, 0x65402a, 0, .005, -.48, gun);
     box(.15, .12, .44, 0x29282a, 0, .02, .16, gun); box(.075, .075, .82, 0x242326, 0, .035, .70, gun);
     const barrelTip = new THREE.Mesh(new THREE.CylinderGeometry(.052, .052, .10, 10), mat(0x171719)); barrelTip.rotation.x = PI / 2; barrelTip.position.set(0, .035, 1.12); gun.add(barrelTip);
@@ -132,13 +144,13 @@ export function createPlayerVisuals(scene) {
     const slashGlow = new THREE.Mesh(new THREE.TorusGeometry(1.05, .12, 5, 32, PI * .92), new THREE.MeshBasicMaterial({ color: 0xff9b3d, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide })); slashFx.add(slashGlow);
     const bgeo = new THREE.SphereGeometry(.1, 6, 5);
 
-    function setWeapon(pl, w) { pl.weapon = w; sword.visible = !w; gun.visible = !!w; reticle.visible = !!w; swordHipBlade.visible = !!w; gunHip.visible = !w; gunHipButt.visible = !w; pl.buf = 0; pl.rec = 0 }
-    function applyWeapon(pl, w) { pl.weapon = w; sword.visible = !w; gun.visible = !!w; reticle.visible = !!w; swordHipBlade.visible = !!w; gunHip.visible = !w; gunHipButt.visible = !w; pl.buf = 0; pl.rec = 0; }
+    function setWeapon(pl, w) { pl.weapon = w; sword.visible = swordLeft.visible = w === 0; gun.visible = w === 1; scythe.visible = w === 2; reticle.visible = w === 1; swordHipBlade.visible = w !== 0; gunHip.visible = gunHipButt.visible = !!pl.gunOwned && w !== 1; pl.buf = 0; pl.rec = 0 }
+    function applyWeapon(pl, w) { setWeapon(pl, w); }
     function setWolfForm(pl, on) { hatG.visible = !on; hipG.visible = !on; wolf.visible = !!on; humanMeshes.forEach(m => m.visible = !on); sheathVisual.visible = !on && !!pl.skills.sheath; }
 
     return {
         root, vis, torso, head, hatG, hipG, legL, legR, armL, armR,
-        sword, gun, blade, sheathVisual, swordHip, swordHipBlade, gunHip, gunHipButt,
+        sword, swordLeft, gun, scythe, blade, sheathVisual, swordHip, swordHipBlade, gunHip, gunHipButt,
         wolf, wolfLegs, wolfArms, humanMeshes, shirtParts, HATS, SHIRTS, COS, saveCos,
         setHat, setShirt, setWeapon, applyWeapon, setWolfForm, wfx, reticle, slashFx, slashMat, slashGlow, bgeo
     };

@@ -78,7 +78,7 @@ export function update(game, dt) {
     const { pl, mode, paused, reticle, enemies, PT, coinsA, occ, scene, sun, torch, daySky, nightSky, dayFog, nightFog, dayHemi, nightHemi, daySun, nightSun } = game;
     $('merchantHint').style.display = (mode === 'play' && !paused && Math.hypot(pl.x + 7, pl.z - 6) < 3.2) ? 'block' : 'none';
     updPlayer(game, dt); game.updBullets(dt); game.updEnemyArrows(dt); game.updRunes(dt); game.updBurn(dt); updWeaponFx(game, dt);
-    { const v = !!pl.weapon && pl.state !== 'dead'; reticle.visible = v; if (v) { const a = aimPoint(game); if (a) reticle.position.set(a.x, hgt(a.x, a.z) + .15, a.z) } }
+    { const v = pl.state !== 'dead'; reticle.visible = v; if (v) { const a = aimPoint(game); if (a) reticle.position.set(a.x, hgt(a.x, a.z) + .15, a.z) } }
     enemies.slice().forEach(e => game.updEnemy(e, dt));
     game.waves.update(dt);
     for (const q of PT) if (q.l > 0) { q.l -= dt; q.v.y -= q.g * dt; q.m.position.addScaledVector(q.v, dt); q.m.scale.multiplyScalar(1 - dt * 2); if (q.l <= 0) q.m.visible = false }

@@ -2,6 +2,8 @@ import { $, toast, showModal } from './dom.js';
 import { S, KB, saveSet, resetSettings } from './settings.js';
 import { save, saveSkills, readSave, need } from './save.js';
 import { applyVideo, R } from './world.js';
+import { scytheAction, throwScythe } from './player/controller.js';
+import { icon } from './icons.js';
 
 const SETS = [['Vídeo', [['q', 'Qualidade gráfica', 's', ['Baixa', 'Média', 'Alta']], ['sh', 'Qualidade das sombras', 's', ['Desligadas', 'Baixa', 'Alta']], ['scale', 'Escala de resolução', 'r', .5, 1, .05], ['far', 'Distância de renderização', 'r', 40, 100, 5], ['fx', 'Efeitos visuais (partículas)', 'c'], ['fps', 'Limite de FPS', 's', ['Sem limite', '30', '60']], ['full', 'Tela cheia', 'f']]],
 ['Áudio', [['master', 'Volume geral', 'r', 0, 1, .05], ['music', 'Música', 'r', 0, 1, .05], ['sfx', 'Efeitos sonoros', 'r', 0, 1, .05], ['amb', 'Sons ambientes', 'r', 0, 1, .05], ['ui', 'Interface', 'r', 0, 1, .05]]],
@@ -29,14 +31,14 @@ export function openMerchant(game, tab) {
     const { pl, HATS, SHIRTS, COS, S } = game;
     tab = tab || 'loja'; if ($('modal').classList.contains('hide')) game.merchantWasPaused = game.paused; game.paused = true; const d = document.createElement('div');
     let h = '<h2>Mercador do Sertão</h2><div class="shop-tabs"><button id="tabS" class="' + (tab === 'loja' ? 'on' : '') + '">Suprimentos</button><button id="tabR" class="' + (tab === 'roupas' ? 'on' : '') + '">Roupas</button></div>';
-    if (tab === 'loja') { const ml = pl.magnetLevel || 0, magPrices = [0, 35, 80, 160]; h += '<p>Suprimentos para continuar a caçada.</p><div class="skill-card"><h3>Ímã de coleta · nível ' + ml + '/3</h3><p>' + (ml === 0 ? 'Atrai moedas em um raio de 4,5 m.' : ml === 1 ? 'Aumenta o raio de coleta para 7,5 m.' : ml === 2 ? 'Aumenta o raio de coleta para 12 m.' : 'Nível máximo: coleta magnética aprimorada.') + '</p><b>' + (ml < 3 ? magPrices[ml + 1] + ' moedas' : 'Totalmente aprimorado') + '</b><p><button id="buyMagnet" ' + (ml >= 3 || pl.coins < magPrices[ml + 1] ? 'disabled' : '') + '>' + (ml >= 3 ? 'Nível máximo' : 'Comprar nível ' + (ml + 1)) + '</button></p></div><div class="skill-card"><h3>Poção de cura</h3><p>Recupera 25 pontos de vida quando usada. No estoque: ' + (pl.potions || 0) + '</p><b>8 moedas</b><p><button id="buyPotion" ' + (pl.coins < 8 ? 'disabled' : '') + '>Comprar poção</button></p></div><div class="skill-card"><h3>Caixa de balas</h3><p>Adiciona 30 munições ao trabuco.</p><b>20 moedas</b><p><button id="buyAmmo" ' + (pl.coins < 20 ? 'disabled' : '') + '>Comprar munição</button></p></div>' }
+    if (tab === 'loja') { const ml = pl.magnetLevel || 0, magPrices = [0, 35, 80, 160]; h += '<p>Suprimentos para continuar a caçada.</p><div class="skill-card"><h3>Trabuco</h3><p>Arma de fogo com 30 balas iniciais.</p><b>75 moedas</b><p><button id="buyGun" ' + (pl.gunOwned || pl.coins < 75 ? 'disabled' : '') + '>' + (pl.gunOwned ? 'Comprado' : 'Comprar Trabuco') + '</button></p></div><div class="skill-card"><h3>Foice-Marreta</h3><p>Arma de duas mãos. J: foice (25), foice (25) e marreta (70). Q lança a foice; após acertar um inimigo, SHIFT+W leva você até ele e SHIFT+S puxa o inimigo. Q recolhe a foice. SHIFT+ESPAÇO: giro defensivo e deflexão.</p><b>300 moedas</b><p><button id="buyScythe" ' + (pl.weaponOwned || pl.coins < 300 ? 'disabled' : '') + '>' + (pl.weaponOwned ? 'Comprada' : 'Comprar Foice-Marreta') + '</button></p></div><div class="skill-card"><h3>Ímã de coleta · nível ' + ml + '/3</h3><p>' + (ml === 0 ? 'Atrai moedas em um raio de 4,5 m.' : ml === 1 ? 'Aumenta o raio de coleta para 7,5 m.' : ml === 2 ? 'Aumenta o raio de coleta para 12 m.' : 'Nível máximo: coleta magnética aprimorada.') + '</p><b>' + (ml < 3 ? magPrices[ml + 1] + ' moedas' : 'Totalmente aprimorado') + '</b><p><button id="buyMagnet" ' + (ml >= 3 || pl.coins < magPrices[ml + 1] ? 'disabled' : '') + '>' + (ml >= 3 ? 'Nível máximo' : 'Comprar nível ' + (ml + 1)) + '</button></p></div><div class="skill-card"><h3>Poção de cura</h3><p>Recupera 25 pontos de vida quando usada. No estoque: ' + (pl.potions || 0) + '</p><b>8 moedas</b><p><button id="buyPotion" ' + (pl.coins < 8 ? 'disabled' : '') + '>Comprar poção</button></p></div><div class="skill-card"><h3>Caixa de balas</h3><p>Uma caixa no inventário adiciona 30 balas quando usada.</p><b>20 moedas</b><p><button id="buyAmmo" ' + (pl.coins < 20 ? 'disabled' : '') + '>Comprar munição</button></p></div>' }
     else {
         h += '<p>Troque o chapéu e a cor da camisa.</p><h3>Chapéus</h3>'; for (const id in HATS) { const H = HATS[id], own = COS.hats.includes(id), cur = COS.hat === id; h += '<div class="skill-card"><h3>' + H.n + '</h3><b>' + (own ? 'Comprado' : H.p + ' moedas') + '</b><p><button data-hat="' + id + '" ' + (cur || (!own && pl.coins < H.p) ? 'disabled' : '') + '>' + (cur ? 'Em uso' : own ? 'Usar' : 'Comprar') + '</button></p></div>' }
         h += '<h3>Camisa</h3><div class="swatches">'; SHIRTS.forEach((shirt, n) => { const own = COS.shirts.includes(shirt.c), cur = COS.shirt === shirt.c; h += '<button data-shirt="' + n + '" ' + (cur || (!own && pl.coins < shirt.p) ? 'disabled' : '') + '><i style="background:#' + shirt.c.toString(16).padStart(6, '0') + '"></i>' + shirt.n + '<small>' + (cur ? 'Em uso' : own ? 'Usar' : shirt.p + ' moedas') + '</small></button>' }); h += '</div>'
     }
     h += '<div class="row"><span>Saldo</span><b>' + pl.coins + ' moedas</b></div><p><button id="closeShop">Sair</button></p>'; d.innerHTML = h; showModal(d);
     $('tabS').onclick = () => openMerchant(game, 'loja'); $('tabR').onclick = () => openMerchant(game, 'roupas'); $('closeShop').onclick = () => { closeModal(game); game.paused = game.merchantWasPaused };
-    if (tab === 'loja') { $('buyMagnet').onclick = () => { const lv = pl.magnetLevel || 0, prices = [0, 35, 80, 160]; if (lv < 3 && pl.coins >= prices[lv + 1]) { if (!pl.god && !S.god) pl.coins -= prices[lv + 1]; pl.magnetLevel = lv + 1; game.playSfx('coins'); toast('Ímã aprimorado para nível ' + pl.magnetLevel); save(game); openMerchant(game, 'loja') } }; $('buyPotion').onclick = () => { if (pl.coins >= 8) { if (!pl.god && !S.god) pl.coins -= 8; pl.potions = (pl.potions || 0) + 1; game.playSfx('coins'); toast('Poção adicionada ao inventário'); save(game); openMerchant(game, 'loja') } }; $('buyAmmo').onclick = () => { if (pl.coins >= 20) { if (!pl.god && !S.god) pl.coins -= 20; pl.ammo += 30; game.playSfx('balas'); game.playSfx('coins'); toast('+30 balas'); save(game); openMerchant(game, 'loja') } } }
+    if (tab === 'loja') { $('buyGun').onclick = () => { if (!pl.gunOwned && pl.coins >= 75) { if (!pl.god && !S.god) pl.coins -= 75; pl.gunOwned = true; pl.ammo += 30; game.setWeapon(1); game.playSfx('coins'); toast('Trabuco adquirido'); save(game); openMerchant(game, 'loja') } }; $('buyScythe').onclick = () => { if (!pl.weaponOwned && pl.coins >= 300) { if (!pl.god && !S.god) pl.coins -= 300; pl.weaponOwned = true; game.setWeapon(2); game.playSfx('coins'); toast('Foice-Marreta adquirida'); save(game); openMerchant(game, 'loja') } }; $('buyMagnet').onclick = () => { const lv = pl.magnetLevel || 0, prices = [0, 35, 80, 160]; if (lv < 3 && pl.coins >= prices[lv + 1]) { if (!pl.god && !S.god) pl.coins -= prices[lv + 1]; pl.magnetLevel = lv + 1; game.playSfx('coins'); toast('Ímã aprimorado para nível ' + pl.magnetLevel); save(game); openMerchant(game, 'loja') } }; $('buyPotion').onclick = () => { if (pl.coins >= 8) { if (!pl.god && !S.god) pl.coins -= 8; pl.potions = (pl.potions || 0) + 1; game.playSfx('coins'); toast('Poção adicionada ao inventário'); save(game); openMerchant(game, 'loja') } }; $('buyAmmo').onclick = () => { if (pl.coins >= 20) { if (!pl.god && !S.god) pl.coins -= 20; pl.ammoBoxes = (pl.ammoBoxes || 0) + 1; game.playSfx('balas'); game.playSfx('coins'); toast('Caixa de balas adicionada ao inventário'); save(game); openMerchant(game, 'loja') } } }
     else {
         d.querySelectorAll('[data-hat]').forEach(b => b.onclick = () => { const id = b.dataset.hat, H = HATS[id]; if (!COS.hats.includes(id)) { if (pl.coins < H.p) return; if (!pl.god && !S.god) pl.coins -= H.p; COS.hats.push(id); game.playSfx('coins') } game.setHat(id); game.saveCos(); save(game); toast(H.n + ' equipado'); openMerchant(game, 'roupas') });
         d.querySelectorAll('[data-shirt]').forEach(b => b.onclick = () => { const shirt = SHIRTS[+b.dataset.shirt]; if (!COS.shirts.includes(shirt.c)) { if (pl.coins < shirt.p) return; if (!pl.god && !S.god) pl.coins -= shirt.p; COS.shirts.push(shirt.c); game.playSfx('coins') } game.setShirt(shirt.c); game.saveCos(); save(game); toast('Camisa ' + shirt.n.toLowerCase() + ' equipada'); openMerchant(game, 'roupas') })
@@ -47,11 +49,36 @@ export function toggleInv(game) {
     const m = $('modal').classList.contains('hide'); if (game.invOpen) { closeModal(game); return } if (!m || game.paused) return; game.invWasPaused = game.paused; game.invOpen = true; game.paused = true; $('pI').onclick()
 }
 
-export function openInventory(game) {
-    const { pl, waves } = game;
-    game.playSfx('openbag');
-    info(game, 'Inventário', '<div class="row"><span>Poções de cura</span><b>' + (pl.potions || 0) + '</b></div><p><button id="usePotion" ' + ((pl.potions || 0) <= 0 || pl.hp >= pl.max ? 'disabled' : '') + '>Usar poção (+25 vida)</button></p><div class="row"><span>Nível</span><b>' + pl.lv + '</b></div><div class="row"><span>Experiência</span><b>' + pl.xp + ' / ' + need(pl.lv) + '</b></div><div class="row"><span>Vida</span><b>' + Math.ceil(pl.hp) + ' / ' + pl.max + '</b></div><div class="row"><span>Moedas</span><b>' + pl.coins + '</b></div><div class="row"><span>Espada</span><b>' + (pl.weapon ? 'guardada' : 'equipada') + '</b></div><div class="row"><span>Trabuco</span><b>' + (pl.weapon ? 'equipado' : 'guardado') + ' · balas 30</b></div><div class="row"><span>Onda atual</span><b>' + Math.max(1, waves.n) + '</b></div>');
-    const use = $('usePotion'); if (use) use.onclick = () => { if ((pl.potions || 0) > 0 && pl.hp < pl.max) { pl.potions--; pl.hp = Math.min(pl.max, pl.hp + 25); game.playSfx('cura'); toast('+25 de vida'); save(game); $('pI').click() } }
+export function openInventory(game, sound = true) {
+    const { pl, COS, HATS, SHIRTS } = game;
+    if (!game.invOpen) { game.invWasPaused = game.paused; game.invOpen = true; game.paused = true }
+    if (sound) game.playSfx('openbag');
+    const items = [];
+    if (pl.potions > 0) items.push({ name: 'Poção de cura', image: icon('potion'), count: pl.potions, action() {
+        if (pl.hp >= pl.max) { toast('Sua vida está cheia'); return false }
+        pl.potions--; pl.hp = Math.min(pl.max, pl.hp + 25); game.playSfx('cura'); toast('+25 de vida'); return true;
+    } });
+    if (pl.ammoBoxes > 0) items.push({ name: 'Caixa de balas', image: icon('ammo'), count: pl.ammoBoxes, action() {
+        pl.ammoBoxes--; pl.ammo += 30; game.playSfx('balas'); toast('+30 balas'); return true;
+    } });
+    if (pl.magnetLevel > 0) items.push({ name: 'Ímã nível ' + pl.magnetLevel, image: icon('magnet'), count: pl.magnetLevel, equipped: true });
+    for (const id of COS.hats) if (HATS[id]) items.push({ name: HATS[id].n, image: icon(id), equipped: COS.hat === id, action() {
+        game.setHat(id); game.saveCos(); toast(HATS[id].n + ' equipado'); return true;
+    } });
+    for (const shirt of SHIRTS) if (COS.shirts.includes(shirt.c)) items.push({ name: 'Camisa ' + shirt.n, image: '<span class="inventory-swatch" style="background:#' + shirt.c.toString(16).padStart(6, '0') + '"></span>', equipped: COS.shirt === shirt.c, action() {
+        game.setShirt(shirt.c); game.saveCos(); toast('Camisa ' + shirt.n.toLowerCase() + ' equipada'); return true;
+    } });
+    const d = document.createElement('div');
+    d.innerHTML = '<h2>Bolsa</h2><p id="inventoryDetail" aria-live="polite">Selecione um item para usar ou equipar.</p><div class="inventory-grid" aria-label="Itens da bolsa">' +
+        items.map((item, i) => '<button class="inventory-slot' + (item.equipped ? ' equipped' : '') + '" data-item="' + i + '" type="button" aria-label="' + item.name + (item.count ? ', quantidade ' + item.count : '') + (item.equipped ? ', equipado' : '') + '" title="' + item.name + '">' + item.image + (item.count ? '<small>' + item.count + '</small>' : '') + '</button>').join('') +
+        Array.from({ length: Math.max(0, 24 - items.length) }, () => '<span class="inventory-slot" aria-hidden="true"></span>').join('') + '</div><p><button id="closeInventory">Fechar</button></p>';
+    showModal(d);
+    d.querySelectorAll('[data-item]').forEach(button => {
+        const item = items[+button.dataset.item];
+        button.onfocus = button.onmouseenter = () => { $('inventoryDetail').textContent = item.name + (item.equipped ? ' · equipado' : item.action ? ' · selecionar para usar ou equipar' : '') };
+        button.onclick = () => { if (item.action && item.action()) { save(game); openInventory(game, false) } };
+    });
+    $('closeInventory').onclick = () => closeModal(game);
 }
 
 function setv(game, k, v) {
@@ -101,7 +128,12 @@ export function drawMinimap(game) {
 
 export function hud(game, dt) {
     const { pl, dns, cam } = game;
-    HUDX(game); drawMinimap(game); $('wn').textContent = pl.weapon ? 'Trabuco' : 'Espada'; $('pips').style.display = pl.weapon ? 'none' : 'inline-flex'; $('am').style.display = pl.weapon ? 'inline' : 'none'; $('am').textContent = ' · balas ' + pl.ammo; $('hp').style.width = pl.hp / pl.max * 100 + '%'; $('hpt').textContent = Math.ceil(pl.hp) + ' / ' + pl.max; $('xp').style.width = pl.xp / need(pl.lv) * 100 + '%'; $('lv').textContent = pl.lv; $('coins').textContent = pl.coins + ' moedas'; $('dg').style.width = (1 - pl.dcd / .9) * 100 + '%'; $('stamina').style.width = (pl.stamina / pl.staminaMax * 100) + '%';
+    HUDX(game); drawMinimap(game); $('wn').textContent = pl.weapon === 1 ? 'Trabuco' : pl.weapon === 2 ? 'Foice-Marreta · ' + (pl.scytheMode === 'hammer' ? 'Marreta' : 'Foice') : 'Espada'; $('pips').style.display = pl.weapon === 0 ? 'inline-flex' : 'none'; $('am').style.display = pl.weapon === 1 ? 'inline' : 'none'; $('am').textContent = ' · balas ' + pl.ammo; $('hp').style.width = pl.hp / pl.max * 100 + '%'; $('hpt').textContent = Math.ceil(pl.hp) + ' / ' + pl.max; $('xp').style.width = pl.xp / need(pl.lv) * 100 + '%'; $('lv').textContent = pl.lv; $('coins').textContent = pl.coins + ' moedas'; $('dg').style.width = (1 - pl.dcd / .9) * 100 + '%'; $('stamina').style.width = (pl.stamina / pl.staminaMax * 100) + '%';
+    const weaponIcon = ['sword', 'gun', 'scythe'][pl.weapon];
+    if ($('weaponIcon').dataset.icon !== weaponIcon) { $('weaponIcon').dataset.icon = weaponIcon; $('weaponIcon').innerHTML = icon(weaponIcon) }
+    const path = pl.skills.swordPath, level = path === 'fire' ? pl.skills.fireStage : path === 'storm' ? pl.skills.stormStage : 0;
+    const status = (level ? '<span class="status-icon" title="' + (path === 'fire' ? 'Caminho do fogo' : 'Caminho elétrico') + ' nível ' + level + '">' + icon(path) + level + '</span>' : '') + (pl.magnetLevel ? '<span class="status-icon" title="Ímã nível ' + pl.magnetLevel + '">' + icon('magnet') + pl.magnetLevel + '</span>' : '');
+    if ($('statusIcons').innerHTML !== status) $('statusIcons').innerHTML = status;
     if (pl.state !== 'attack' && pl.t - pl.lastEnd > .5) [...$('pips').children].forEach(u => u.classList.remove('on'));
     for (let i = dns.length - 1; i >= 0; i--) { const n = dns[i]; n.t += dt; n.p.y += dt * 1.2; const v = n.p.clone().project(cam); n.el.style.left = (v.x * .5 + .5) * innerWidth + 'px'; n.el.style.top = (-v.y * .5 + .5) * innerHeight + 'px'; n.el.style.opacity = 1 - n.t / .8; if (n.t > .8) { n.el.remove(); dns.splice(i, 1) } }
 }
@@ -139,15 +171,19 @@ export function bindInput(game) {
     addEventListener('keydown', e => {
         const k = e.key.toLowerCase(); game.keys[k] = 1;
         if (k === 'escape') { escKey(game); return }
+        if (k === 'shift' && game.mode === 'play' && !game.paused && game.pl.weapon === 2 && !e.repeat) { if (game.keys.w) { e.preventDefault(); game.keys.scytheCombo = 1; scytheAction(game, 'grapple') } else if (game.keys.s) { e.preventDefault(); game.keys.scytheCombo = 1; scytheAction(game, 'pull') } else if (game.keys[' ']) { e.preventDefault(); game.keys.scytheCombo = 1; scytheAction(game, 'spin') } }
         if (k === 't' && game.mode === 'play' && !e.repeat) { e.preventDefault(); if (game.skillTreeOpen) { closeModal(game) } else if ($('modal').classList.contains('hide')) { openSkillTree(game) } return }
         if (k === 'i' && game.mode === 'play' && !e.repeat && game.pl.state !== 'dead') { e.preventDefault(); toggleInv(game); return }
         if (game.listen) { bindKey(game, k, e); return }
         if (game.mode === 'intro' && (k === 'enter' || k === ' ')) { game.skipIntro(); return }
+        if (k === 'q' && game.mode === 'play' && !game.paused && game.pl.weapon === 2) { e.preventDefault(); if (!e.repeat) throwScythe(game); return }
         if (k === KB.atk && game.mode === 'play' && !game.paused) game.pl.buf = .28;
-        if (k === KB.weapon && !e.repeat && game.running && !game.paused && (game.pl.state === 'idle' || game.pl.state === 'move')) game.startSwap(1 - game.pl.weapon);
-        if (k === KB.dodge || k === ' ') { if (game.mode === 'play' && !game.paused) { game.want.dodge = true; e.preventDefault() } }
+        if ((k === 'w' || k === 's') && game.mode === 'play' && !game.paused && game.pl.weapon === 2 && game.keys.shift && !e.repeat) { e.preventDefault(); game.keys.scytheCombo = 1; scytheAction(game, k === 'w' ? 'grapple' : 'pull') }
+        if (k === ' ' && game.mode === 'play' && !game.paused && game.pl.weapon === 2 && game.keys.shift && !e.repeat) { e.preventDefault(); game.keys.scytheCombo = 1; scytheAction(game, 'spin'); return }
+        if (k === KB.weapon && !e.repeat && game.running && !game.paused && (game.pl.state === 'idle' || game.pl.state === 'move')) { const owned = [0, ...(game.pl.gunOwned ? [1] : []), ...(game.pl.weaponOwned ? [2] : [])]; const idx = owned.indexOf(game.pl.weapon); game.startSwap(owned[(idx + 1) % owned.length]) }
+        if (k === ' ' && game.pl.weapon !== 2) { if (game.mode === 'play' && !game.paused) { game.want.dodge = true; e.preventDefault() } }
     });
-    addEventListener('keyup', e => { delete game.keys[e.key.toLowerCase()] });
+    addEventListener('keyup', e => { const k = e.key.toLowerCase(); delete game.keys[k]; if (k === 'shift' && game.mode === 'play' && !game.paused && !game.keys.scytheCombo) game.want.dodge = true; if (k === ' ' && game.pl.weapon === 2 && game.mode === 'play' && !game.paused && !game.keys.shift && !game.keys.scytheCombo) game.want.dodge = true; if (game.keys.scytheCombo && !game.keys.shift && !game.keys.w && !game.keys.s && !game.keys[' ']) delete game.keys.scytheCombo });
     addEventListener('keydown', e => {
         if (e.key.toLowerCase() === 'e' && game.mode === 'play' && !e.repeat) {
             if (!$('modal').classList.contains('hide')) { if ($('mc').querySelector('#closeShop')) { e.preventDefault(); closeModal(game); game.paused = game.merchantWasPaused } return }
